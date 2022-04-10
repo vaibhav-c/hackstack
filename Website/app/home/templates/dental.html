@@ -1,0 +1,156 @@
+{% extends "layouts/base.html" %} {% block title %} {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<style>
+    .dropbtn {
+        background-color: #04AA6D;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .dropbtn:hover,
+    .dropbtn:focus {
+        background-color: #3e8e41;
+    }
+    
+    #myInput {
+        box-sizing: border-box;
+        background-image: url('searchicon.png');
+        background-position: 14px 12px;
+        background-repeat: no-repeat;
+        font-size: 16px;
+        padding: 14px 20px 12px 45px;
+        border: none;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    #myInput:focus {
+        outline: 3px solid #ddd;
+    }
+    
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f6f6f6;
+        min-width: 230px;
+        overflow: auto;
+        border: 1px solid #ddd;
+        z-index: 1;
+    }
+    
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+    
+    .dropdown a:hover {
+        background-color: #ddd;
+    }
+    
+    .show {
+        display: block;
+    }
+    
+    #fileUpload {
+        border: 1px solid #000;
+        padding: 6px 12px;
+        cursor: pointer;
+        float: left;
+        margin-right: 20px;
+    }
+</style>
+
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <!-- [ breadcrumb ] start -->
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- [ Main Content ] start -->
+                <div class = "card" style = "margin-top: 20px;">
+                    <div class="card-header">
+                        <h5 id="name">
+                            Cavity
+                        </h5>
+                    </div>
+                    <div class="card-block">
+                        <p>Upload the image of your teeth to find out the areas of cavity</p>
+                    </div>
+                </div>
+                <form method=post enctype=multipart/form-data>
+                    <input id="fileUpload" type=file name=file>
+                    <br></br>
+                    <br></br>
+                    <button type="submit" class='form-control' name="register" class="btn btn-primary shadow-2 mb-4">Submit</button>
+            
+            </form>
+            {% if img %}
+            <img id="picture" style = "margin-top: 10px ;" src="data:image/jpeg;base64,{{ img }}">
+            {% endif %}
+            <div class = "card" style = "margin-top: 20px;">
+                <div class="card-header">
+                    <h5 id="name">
+                        Staining
+                    </h5>
+                </div>
+                <div class="card-block">
+                    <p>Upload the image of your teeth to find out the areas of stain</p>
+                </div>
+            </div>
+            <form method=post enctype=multipart/form-data>
+                <input id="fileUpload" type=file name=file1>
+                <br></br>
+                <br></br>
+                <button type="submit" class='form-control' name="register1" class="btn btn-primary shadow-2 mb-4">Submit</button>
+        
+            </form>
+            {% if img1 %}
+            <img id="picture" style = "margin-top: 10px ;" src="data:image/jpeg;base64,{{ img1 }}">
+            {% endif %}
+            <div class = "card" style = "margin-top: 20px;">
+                <div class="card-header">
+                    <h5 id="name">
+                        Plaque
+                    </h5>
+                </div>
+                <div class="card-block">
+                    <p>Upload the image of your teeth to find out the areas of plaque</p>
+                </div>
+            </div>
+            <form method=post enctype=multipart/form-data>
+            <input id="fileUpload" type=file name=file2>
+            <br></br>
+            <br></br>
+            <button type="submit" class='form-control' name="register2" class="btn btn-primary shadow-2 mb-4">Submit</button>
+    
+        </form>
+        {% if img2 %}
+        <img id="picture" style = "margin-top: 10px ;" src="data:image/jpeg;base64,{{ img2 }}">
+        {% endif %}
+
+        </div>
+        </div>
+
+        </script>
+
+    </div>
+</div>
+
+</div>
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %} {% endblock javascripts %}

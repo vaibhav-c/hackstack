@@ -1,0 +1,922 @@
+{% extends "layouts/base.html" %} {% block title %} UI Tabs {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+    #chartdiv-steps {
+        width: 100%;
+        height: 600px;
+    }
+    
+    #chartdiv-calories {
+        width: 40%;
+        height: 1600px;
+    }
+    
+    .col {
+        width: 50%;
+        margin: 20px;
+        text-align: center;
+    }
+    
+    * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .container {
+        --ground-color: #8a6a40;
+        --anim-speed: 570ms;
+        width: 100vw;
+        height: 320px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+    
+    .man {
+        --skin-light-color: #fbc2a7;
+        --skin-dark-color: #ffb898;
+        --skin-darker-color: #f5af8e;
+        --hat-color: #3b3a3b;
+        --glasses-color: #5a5a5a;
+        --shoes-color: #ffffff;
+        --cloth-light-color: #f64231;
+        --cloth-dark-color: #d64134;
+        --cloth-darker-color: #b63e33;
+        position: relative;
+        width: 200px;
+        height: 280px;
+        animation: BodyAnim var(--anim-speed) ease 0s infinite;
+    }
+    /* ------ B O D Y ----------------------------- */
+    
+    .body {
+        position: relative;
+        width: 51px;
+        height: 103px;
+        top: 110px;
+        left: 73px;
+        background-color: var(--cloth-dark-color);
+        border-radius: 50px;
+    }
+    /* ------ H E A D ----------------------------- */
+    
+    .head {
+        position: relative;
+        top: -100px;
+        left: -30px;
+        width: 96px;
+        height: 97px;
+        background-color: var(--skin-dark-color);
+        border-radius: 50px 40px 30px 68px;
+        transform-origin: bottom;
+        animation: HeadAnim var(--anim-speed) ease 0s infinite;
+    }
+    
+    .head .hat {
+        position: absolute;
+        top: -8px;
+        left: -4px;
+        width: 102px;
+        height: 48px;
+        background-color: var(--hat-color);
+        border-radius: 42px 41px 0px 5px;
+        transform: rotate(-3deg);
+    }
+    
+    .head .hat::after {
+        content: "";
+        position: absolute;
+        top: 39px;
+        left: 51px;
+        width: 82px;
+        height: 9px;
+        background-color: var(--hat-color);
+        border-radius: 0px 7px 4px 0px;
+    }
+    
+    .head .glasses {
+        position: absolute;
+        top: 43px;
+        left: 90px;
+        width: 11px;
+        height: 24px;
+        background-color: var(--glasses-color);
+        border-radius: 10px 6px 6px 15px;
+    }
+    
+    .head .glasses::after {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: -60px;
+        width: 68px;
+        height: 3px;
+        background-color: var(--glasses-color);
+    }
+    
+    .head .ear {
+        position: absolute;
+        top: 45px;
+        left: 27px;
+        width: 17px;
+        height: 24px;
+        background-color: var(--skin-light-color);
+        border-radius: 6px 9px 4px 12px;
+        border-left: solid 4px var(--skin-darker-color);
+    }
+    
+    .head .mouth {
+        position: absolute;
+        top: 75px;
+        left: 82px;
+        width: 10px;
+        height: 8px;
+        background-color: #a6452a;
+        border-radius: 8px 10px 21px 13px;
+    }
+    /* ------ A R M S ----------------------------- */
+    
+    .arm {
+        position: absolute;
+        top: 5px;
+        left: 14px;
+        width: 32px;
+        height: 63px;
+        background-color: var(--cloth-light-color);
+        border-radius: 50px;
+        transform-origin: 50% 15px;
+    }
+    
+    .arm .lower-arm {
+        position: absolute;
+        top: 35px;
+        left: 2px;
+        width: 29px;
+        height: 55px;
+        background-color: var(--cloth-light-color);
+        border-radius: 50px;
+        transform-origin: 50% 16px;
+    }
+    
+    .arm .lower-arm::after {
+        /*Hand*/
+        content: "";
+        position: absolute;
+        top: 60px;
+        left: 6px;
+        width: 22px;
+        height: 19px;
+        background-color: var(--skin-light-color);
+        border-radius: 9px 12px 6px 7px;
+    }
+    
+    .arm.left {
+        z-index: -1;
+        left: 0px;
+        background-color: var(--cloth-darker-color);
+    }
+    
+    .arm.left .lower-arm {
+        background-color: var(--cloth-darker-color);
+    }
+    /* rotations */
+    
+    .arm.right {
+        transform: rotate(-55deg);
+        animation: RightArmAnim var(--anim-speed) ease 0s infinite;
+    }
+    
+    .arm.right .lower-arm {
+        transform: rotate(-66deg);
+        animation: RightLowerArmAnim var(--anim-speed) ease 0s infinite;
+    }
+    
+    .arm.left {
+        transform: rotate(86deg);
+        animation: LeftArmAnim var(--anim-speed) ease 0s infinite;
+    }
+    
+    .arm.left .lower-arm {
+        transform: rotate(-66deg);
+        animation: LeftLowerArmAnim var(--anim-speed) ease 0s infinite;
+    }
+    /* ------ L E G S ----------------------------- */
+    
+    .leg {
+        position: absolute;
+        top: 62px;
+        left: 6px;
+        width: 41px;
+        height: 73px;
+        background-color: var(--cloth-dark-color);
+        border-radius: 50px;
+        transform-origin: 50% 20px;
+    }
+    
+    .leg .lower-leg {
+        position: absolute;
+        top: 35px;
+        left: 2px;
+        width: 38px;
+        height: 80px;
+        background-color: var(--cloth-dark-color);
+        border-radius: 20px 20px 4px 4px;
+        transform-origin: 50% 20px;
+        transform: rotate(3deg);
+    }
+    
+    .leg .lower-leg::after {
+        /*Shoes*/
+        content: "";
+        position: absolute;
+        top: 84px;
+        left: 5px;
+        width: 44px;
+        height: 13px;
+        background-color: var(--shoes-color);
+        border: solid 1px rgba(0, 0, 0, 30%);
+        border-bottom: solid 4px rgba(184, 184, 184, 0.986);
+        border-radius: 5px 13px 6px 7px;
+    }
+    
+    .leg.left {
+        z-index: -1;
+        background-color: var(--cloth-darker-color);
+    }
+    
+    .leg.left .lower-leg {
+        background-color: var(--cloth-darker-color);
+    }
+    /* rotations */
+    
+    .leg.right {
+        transform: rotate(29deg);
+        animation: RightLegAnim var(--anim-speed) ease 0s infinite;
+    }
+    
+    .leg.right .lower-leg {
+        transform: rotate(66deg);
+        animation: RightLowerLegAnim var(--anim-speed) ease 0s infinite;
+    }
+    
+    .leg.left {
+        transform: rotate(-70deg);
+        animation: LeftLegAnim var(--anim-speed) ease 0s infinite;
+    }
+    
+    .leg.left .lower-leg {
+        transform: rotate(24deg);
+        animation: LeftLowerLegAnim var(--anim-speed) ease 0s infinite;
+    }
+    /*Animations---------------------------------------*/
+    /*Body*/
+    
+    @-webkit-keyframes BodyAnim {
+        from {
+            transform: translateY(-15px) rotate(25deg);
+        }
+        25% {
+            transform: translateY(-0px) rotate(25deg);
+        }
+        50% {
+            transform: translateY(-12px) rotate(25deg);
+        }
+        75% {
+            transform: translateY(-0px) rotate(25deg);
+        }
+        to {
+            transform: translateY(-15px) rotate(25deg);
+        }
+    }
+    /*Head*/
+    
+    @-webkit-keyframes HeadAnim {
+        from {
+            transform: translateY(1px) rotate(-15deg);
+        }
+        25% {
+            transform: translateY(-0px) rotate(-19deg);
+        }
+        50% {
+            transform: translateY(-1px) rotate(-15deg);
+        }
+        75% {
+            transform: translateY(-0px) rotate(-10deg);
+        }
+        to {
+            transform: translateY(1px) rotate(-15deg);
+        }
+    }
+    /*Arms*/
+    
+    @-webkit-keyframes RightArmAnim {
+        from {
+            transform: rotate(-60deg);
+        }
+        50% {
+            transform: rotate(60deg);
+        }
+        to {
+            transform: rotate(-60deg);
+        }
+    }
+    
+    @-webkit-keyframes RightLowerArmAnim {
+        from {
+            transform: rotate(-45deg);
+        }
+        50% {
+            transform: rotate(-120deg);
+        }
+        to {
+            transform: rotate(-45deg);
+        }
+    }
+    
+    @-webkit-keyframes LeftArmAnim {
+        from {
+            transform: rotate(80deg);
+        }
+        50% {
+            transform: rotate(-60deg);
+        }
+        to {
+            transform: rotate(80deg);
+        }
+    }
+    
+    @-webkit-keyframes LeftLowerArmAnim {
+        from {
+            transform: rotate(-80deg);
+        }
+        50% {
+            transform: rotate(-60deg);
+        }
+        to {
+            transform: rotate(-80deg);
+        }
+    }
+    /*Legs*/
+    
+    @-webkit-keyframes RightLegAnim {
+        from {
+            transform: rotate(60deg);
+        }
+        50% {
+            transform: rotate(-100deg);
+        }
+        to {
+            transform: rotate(60deg);
+        }
+    }
+    
+    @-webkit-keyframes RightLowerLegAnim {
+        from {
+            transform: rotate(45deg);
+        }
+        50% {
+            transform: rotate(35deg);
+        }
+        to {
+            transform: rotate(45deg);
+        }
+    }
+    
+    @-webkit-keyframes LeftLegAnim {
+        from {
+            transform: rotate(-90deg);
+        }
+        50% {
+            transform: rotate(80deg);
+        }
+        to {
+            transform: rotate(-90deg);
+        }
+    }
+    
+    @-webkit-keyframes LeftLowerLegAnim {
+        from {
+            transform: rotate(45deg);
+        }
+        50% {
+            transform: rotate(35deg);
+        }
+        to {
+            transform: rotate(45deg);
+        }
+    }
+    
+    .flame {
+        width: 10em;
+        height: 12em;
+        font-size: 24px;
+        position: relative;
+    }
+    
+    .flame span {
+        position: absolute;
+        width: 5em;
+        height: 5em;
+        background: radial-gradient( orangered 20%, rgba(255, 69, 0, 0) 70%);
+        border-radius: 50%;
+        bottom: 0;
+        left: calc((var(--n) - 1) * 5em / var(--particles));
+        mix-blend-mode: screen;
+        animation: rise 1s ease-in infinite;
+        animation-delay: calc(var(--rnd) * 1s);
+    }
+    
+    @keyframes rise {
+        from {
+            transform: translateY(0) scale(1);
+            filter: opacity(0);
+        }
+        25% {
+            filter: opacity(1);
+        }
+        to {
+            transform: translateY(-10em) scale(0);
+            filter: opacity(0);
+        }
+    }
+    /* Start of DCA Plan Tab */
+    
+    #dca_plan_tab .heading {
+        margin-bottom: 15px;
+    }
+    
+    #dca_plan_tab .heading span {
+        font-size: 25px;
+        font-weight: 500;
+    }
+    
+    #dca_plan_tab .heading i {
+        font-size: 15px;
+        line-height: 40px;
+    }
+    
+    #dca_plan_tab .content {
+        margin-bottom: 15px;
+        height: 50px;
+    }
+    
+    #dca_plan_tab .content i {
+        position: absolute;
+        background: #dff1fb;
+        height: 40px;
+        width: 40px;
+        border-radius: 10px;
+        text-align: center;
+        line-height: 40px;
+        bottom: 5px;
+    }
+    
+    #dca_plan_tab .c1 i {
+        background: #dff1fb;
+        color: #1ca3ec;
+        box-shadow: 2px 2px 8px -1px rgba(0, 0, 0, 0.15);
+    }
+    
+    #dca_plan_tab .c2 i {
+        background: #feeed5;
+        color: #8db600;
+        box-shadow: 2px 2px 8px -1px rgba(0, 0, 0, 0.15);
+    }
+    
+    #dca_plan_tab .c3 i {
+        background: #ffe7dc;
+        /*background: #fbd3c0;*/
+        color: #CF5300;
+        box-shadow: 2px 2px 8px -1px rgba(0, 0, 0, 0.15);
+    }
+    
+    #dca_plan_tab .c4 i {
+        background: #fcb0d4;
+        box-shadow: 2px 2px 8px -1px rgba(0, 0, 0, 0.15);
+    }
+    
+    #dca_plan_tab .content span {
+        display: block;
+    }
+    
+    #dca_plan_tab .content div.col-8 span:first-child {
+        font-size: 17px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        text-align: left;
+    }
+    
+    #dca_plan_tab .content div.col-8 span:last-child {
+        font-size: 14px;
+        font-weight: 400;
+        color: rgba(85, 71, 107, 0.6);
+        letter-spacing: 0.5px;
+        width: 400px;
+        text-align: left;
+    }
+    
+    #dca_plan_tab span.circle {
+        position: absolute;
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        border: 5px solid #dff1fb;
+        border-left-color: rgba(0, 0, 255, 0.3);
+        bottom: 5px;
+    }
+    
+    #dca_plan_tab .c1 span.circle {
+        border: 4px solid #a5d9e4;
+        border-left-color: #dff1fb;
+        transform: rotate(95deg);
+    }
+    
+    #dca_plan_tab .c2 span.circle {
+        border: 4px solid #f9d090;
+        border-left-color: #feeed5;
+        transform: rotate(150deg);
+    }
+    
+    #dca_plan_tab .c3 span.circle {
+        border: 4px solid #ecc29c;
+        border-left-color: #ffe7dc;
+        transform: rotate(40deg);
+    }
+    
+    #dca_plan_tab .c4 span.circle {
+        border: 4px solid #edb1cd;
+        border-left-color: #ffe9de;
+        border-top-color: #ffe9de;
+        transform: rotate(2deg);
+    }
+    /* End of DCA Plan Tab */
+    
+    .col2 {
+        width: 60%;
+    }
+    
+    .col3 {
+        width: 40%;
+    }
+    
+    #chartdiv-bmi {
+        width: 100%;
+        height: 500px;
+    }
+</style>
+<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'> {% endblock stylesheets %} {% block content %}
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="col-sm-12">
+            <h5 class="mt-4">Health Analysis</h5>
+            This dashboard allows you to look at your health data.
+            <br><b>
+            <h6 id="reco">
+                </b>
+            </h6>
+            <hr>
+            <div class="card" style="padding: 20px;">
+                <div class="row">
+                    <img src="/static/assets/images/fit.png" style="height: 236px; width: 320px; margin: auto;">
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col" style="margin: auto;">
+                        <div class="container" style="width: 100%;">
+
+
+                            <!--<div class="flame"></div>-->
+
+                            <div class="col" style="margin-left: 50px; margin-right: 50px;">
+                                <div class="row">
+                                    <h5 style="background-color: rgb(0, 195, 255); padding: 10px; width: 100%; margin-bottom: 0px;"><b>Steps</b></h5>
+                                </div>
+                                <div class="row">
+                                    <h5 style="background-color: rgb(197, 241, 255); padding: 10px; width: 100%;" id="step-count"><b></b></h5>
+                                </div>
+                            </div>
+                            <div class="man">
+                                <div class="body">
+                                    <div class="head">
+                                        <div class="hat"></div>
+                                        <div class="glasses"></div>
+                                        <div class="ear"></div>
+                                        <div class="mouth"></div>
+                                    </div>
+
+                                    <div class="arm left">
+                                        <div class="lower-arm"></div>
+                                    </div>
+                                    <div class="leg left">
+                                        <div class="lower-leg"></div>
+                                    </div>
+                                    <div class="leg right">
+                                        <div class="lower-leg"></div>
+                                    </div>
+                                    <div class="arm right">
+                                        <div class="lower-arm"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col" style="margin-left: 50px; margin-right: 50px;">
+                                <div class="row">
+                                    <h5 style="background-color: rgb(0, 195, 255); padding: 10px; width: 100%; margin-bottom: 0px;"><b>Calories Burnt</b></h5>
+                                </div>
+                                <div class="row">
+                                    <h5 style="background-color: rgb(197, 241, 255); padding: 10px; width: 100%;" id="calorie-count"><b></b></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class='col2'>
+                                <div id="chartdiv-bmi"></div>
+                            </div>
+                            <div class="col3">
+                                <section class="col-8" id="dca_plan_tab" style="max-width: 100%;">
+                                    <div class="row heading">
+                                        <div class="col-8">
+                                            <span>Nutrition Plan</span>
+                                        </div>
+                                    </div>
+                                    <div class="row content c1">
+                                        <div class="col-2">
+                                            <i class="fas fa-tint"></i>
+                                        </div>
+                                        <div class="col-8">
+                                            <span>Water</span>
+                                            <span style="font-size: 14px;" id="water"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row content c2">
+                                        <div class="col-2">
+                                            <i class="fab fa-apple"></i>
+                                        </div>
+                                        <div class="col-8">
+                                            <span>Food</span>
+                                            <span style="font-size: 14px;" id="food"></span>
+                                        </div>
+
+                                    </div>
+                                    <div class="row content c3">
+                                        <div class="col-2">
+                                            <i class="fas fa-basketball-ball"></i>
+                                        </div>
+                                        <div class="col-8">
+                                            <span>Activity</span>
+                                            <span style="font-size: 14px;" id="activity"></span>
+                                        </div>
+
+                                    </div>
+                                    <div class="row content c4">
+                                        <div class="col-2">
+                                            <i class="fas fa-bed"></i>
+                                        </div>
+                                        <div class="col-8">
+                                            <span>Sleep</span>
+                                            <span style="font-size: 14px;" id="sleep"></span>
+                                        </div>
+
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                        
+
+                        <!-- <div class='col'>
+                                <div id="chartdiv-calories"></div>
+                            </div> -->
+
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- <div class="col-sm-12">
+        <h5 class="mt-4">Health Recommendations</h5>
+        <h7 id = "reco">
+        </h7>
+        <hr>
+    </div> -->
+</div>
+
+
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/dataviz.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/plugins/timeline.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/plugins/bullets.js"></script>
+<script>
+    var allData = JSON.parse('{{allData | tojson}}');
+
+    document.getElementById("step-count").innerHTML = allData.steps_fit;
+    document.getElementById("calorie-count").innerHTML = (allData.calorie_fit).toFixed(2);
+
+    var bmi = (allData.weight_fit / (allData.height_fit * allData.height_fit));
+    var verdict = "";
+    if (bmi < 18.5) {
+        verdict = "Underweight";
+    } else if (bmi >= 18.5 && bmi <= 24.9) {
+        verdict = "Normal";
+    } else if (bmi >= 25.0 && bmi <= 29.9) {
+        verdict = "Overweight";
+    } else {
+        verdict = "Obese";
+    }
+
+    //verdict = "Obese";
+    if(Number.isNaN(bmi)) {
+        bmi = 0;
+    }
+    var nut = allData.nutrition_data[verdict];
+
+    document.getElementById('sleep').innerHTML = nut.sleep;
+    document.getElementById('activity').innerHTML = nut.activity;
+    document.getElementById('food').innerHTML = nut.food;
+    document.getElementById('water').innerHTML = nut.water;
+
+    /*const COUNT_OF_PARTICLES = 100
+    const container = document.querySelector('.flame')
+
+    container.style.setProperty('--particles', COUNT_OF_PARTICLES)
+
+    Array(COUNT_OF_PARTICLES).fill('').forEach((particle, i) => {
+        let span = document.createElement('span')
+        span.style.setProperty('--n', i + 1)
+        span.style.setProperty('--rnd', Math.random())
+        container.appendChild(span)
+    })*/
+
+    am4core.ready(function() {
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+        var chartMin = 0;
+        var chartMax = 50;
+
+        var data = {
+            score: bmi,
+            gradingData: [{
+                title: "Obese Class III",
+                color: "#ee1f25",
+                lowScore: 40,
+                highScore: 50
+            }, {
+                title: "Obese Class II",
+                color: "#f04922",
+                lowScore: 35,
+                highScore: 39.9
+            }, {
+                title: "Obese Class I",
+                color: "#fdae19",
+                lowScore: 30,
+                highScore: 34.9
+            }, {
+                title: "Overweight",
+                color: "#f3eb0c",
+                lowScore: 25,
+                highScore: 29.9
+            }, {
+                title: "Normal",
+                color: "#54b947",
+                lowScore: 18.5,
+                highScore: 24.9
+            }, {
+                title: "Underweight",
+                color: "blue",
+                lowScore: 0,
+                highScore: 18.5
+            }, ]
+        };
+
+        /**
+        Grading Lookup
+        */
+        function lookUpGrade(lookupScore, grades) {
+            // Only change code below this line
+            for (var i = 0; i < grades.length; i++) {
+                if (
+                    grades[i].lowScore < lookupScore &&
+                    grades[i].highScore >= lookupScore
+                ) {
+                    return grades[i];
+                }
+            }
+            return null;
+        }
+
+        // create chart
+        var chart = am4core.create("chartdiv-bmi", am4charts.GaugeChart);
+        chart.hiddenState.properties.opacity = 0;
+        chart.fontSize = 11;
+        chart.innerRadius = am4core.percent(80);
+        chart.resizable = true;
+
+        /**
+         * Normal axis
+         */
+
+        var axis = chart.xAxes.push(new am4charts.ValueAxis());
+        axis.min = chartMin;
+        axis.max = chartMax;
+        axis.strictMinMax = true;
+        axis.renderer.radius = am4core.percent(80);
+        axis.renderer.inside = true;
+        axis.renderer.line.strokeOpacity = 0.1;
+        axis.renderer.ticks.template.disabled = false;
+        axis.renderer.ticks.template.strokeOpacity = 1;
+        axis.renderer.ticks.template.strokeWidth = 0.5;
+        axis.renderer.ticks.template.length = 5;
+        axis.renderer.grid.template.disabled = true;
+        axis.renderer.labels.template.radius = am4core.percent(10);
+        axis.renderer.labels.template.fontSize = "0.9em";
+
+        /**
+         * Axis for ranges
+         */
+
+        var axis2 = chart.xAxes.push(new am4charts.ValueAxis());
+        axis2.min = chartMin;
+        axis2.max = chartMax;
+        axis2.strictMinMax = true;
+        axis2.renderer.labels.template.disabled = true;
+        axis2.renderer.ticks.template.disabled = true;
+        axis2.renderer.grid.template.disabled = false;
+        axis2.renderer.grid.template.opacity = 1;
+        axis2.renderer.labels.template.bent = true;
+        axis2.renderer.labels.template.fill = am4core.color("#fff");
+        axis2.renderer.labels.template.fontWeight = "bold";
+        axis2.renderer.labels.template.fillOpacity = 1;
+
+
+
+        /**
+        Ranges
+        */
+
+        for (let grading of data.gradingData) {
+            var range = axis2.axisRanges.create();
+            range.axisFill.fill = am4core.color(grading.color);
+            range.axisFill.fillOpacity = 0.8;
+            range.axisFill.zIndex = -1;
+            range.value = grading.lowScore > chartMin ? grading.lowScore : chartMin;
+            range.endValue = grading.highScore < chartMax ? grading.highScore : chartMax;
+            range.grid.strokeOpacity = 0;
+            range.stroke = am4core.color(grading.color).lighten(-0.1);
+            range.label.inside = true;
+            range.label.text = grading.title.toUpperCase();
+            range.label.inside = true;
+            range.label.location = 0.5;
+            range.label.inside = true;
+            range.label.radius = am4core.percent(10);
+            range.label.paddingBottom = -5; // ~half font size
+            range.label.fontSize = "0.9em";
+        }
+
+        //console.log(data)
+
+        var matchingGrade = lookUpGrade(data.score, data.gradingData);
+
+        /**
+         * Label 1
+         */
+
+        var label = chart.radarContainer.createChild(am4core.Label);
+        label.isMeasured = false;
+        label.fontSize = "5em";
+        label.x = am4core.percent(50);
+        label.paddingBottom = 5;
+        label.horizontalCenter = "middle";
+        label.verticalCenter = "bottom";
+        //label.dataItem = data;
+        label.text = "\n" + data.score.toFixed(1) + "\n BMI";
+        //label.text = "{score}";
+        label.fill = am4core.color(matchingGrade.color);
+
+        var hand = chart.hands.push(new am4charts.ClockHand());
+        hand.axis = axis2;
+        hand.innerRadius = am4core.percent(55);
+        hand.startWidth = 8;
+        hand.pin.disabled = true;
+        hand.value = data.score;
+        hand.fill = am4core.color("#444");
+        hand.stroke = am4core.color("#000");
+
+    }); // end am4core.ready()
+</script>
+
+{% endblock javascripts %}
